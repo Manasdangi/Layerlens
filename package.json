@@ -1,9 +1,23 @@
 {
-  "name": "figr-frontend-assignment",
+  "name": "layerlens",
+  "description": "A design-tool viewer for live, cross-origin page previews: hover and select any element, browse a lazy-loaded layers tree, and inspect live styles, all across iframes using postMessage only.",
   "private": true,
-  "description": "Starter kit for the Figr frontend engineer assignment",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "backend": "node backend/server.js"
+    "backend": "node backend/server.js",
+    "frontend": "npm --prefix frontend run dev",
+    "dev": "concurrently -k -n backend,frontend -c blue,magenta \"npm run backend\" \"npm run frontend\"",
+    "postinstall": "npm --prefix frontend install",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "npm --prefix frontend test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:setup": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "concurrently": "^9.2.1"
   }
 }
