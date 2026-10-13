@@ -4,6 +4,22 @@
 
 Built for the Figr frontend engineer assignment. The brief is in [BRIEF.md](BRIEF.md).
 
+## Screenshots
+
+**Select an element.** The 2px outline and label stay glued to it. Its row is revealed in the layers panel, and the inspector shows live values plus details from the API. The hover outline (1px, blue) is on a feature card heading.
+
+![Layerlens: a selected button with its layers row and inspector](docs/screenshots/overview.png)
+
+**Deep trees load on demand.** Selecting a leaf 30 levels down loads and expands every ancestor, then scrolls the panel to its row.
+
+![A leaf 30 levels deep, revealed in the layers panel](docs/screenshots/deep-tree.png)
+
+**Failures stay in their region.** Here one preview's page never answered, a Details request failed, and another page threw its own error (badge, message on hover). Everything else keeps working, and each failure has its own Retry.
+
+![A preview that couldn't connect, a Details error, and a page error badge](docs/screenshots/failures.png)
+
+To regenerate them: `npm run screenshots`.
+
 ## Run
 
 ```

@@ -14,7 +14,8 @@
     "test:unit": "npm --prefix frontend test",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:setup": "playwright install chromium"
+    "test:setup": "playwright install chromium",
+    "screenshots": "playwright test -c playwright.screenshots.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",

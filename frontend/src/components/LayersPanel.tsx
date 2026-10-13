@@ -19,6 +19,7 @@ import { Region } from "./Region";
 import { useRegion } from "./regionApi";
 
 const ROW_H = 24;
+const rowIndent = (depth: number) => 6 + depth * 14;
 
 export function LayersPanel() {
   const activeId = useStore((s) => s.activeId);
@@ -148,6 +149,9 @@ function useListScroll(screenId: string, docId: string, rows: Row[]) {
         const top = idx * ROW_H;
         if (top < el.scrollTop) el.scrollTop = top;
         else if (top + ROW_H > el.scrollTop + el.clientHeight) el.scrollTop = top + ROW_H - el.clientHeight;
+        // Deep rows are indented past the panel's width: bring the row's name into view too.
+        const left = rowIndent(rows[idx].depth);
+        if (left < el.scrollLeft || left > el.scrollLeft + el.clientWidth - 120) el.scrollLeft = Math.max(0, left - 24);
         consumeReveal();
       }
     }
@@ -192,7 +196,7 @@ const LayerRow = memo(function LayerRow({ screenId, node, depth, open, searching
   return (
     <div
       className={`row${selected ? " selected" : ""}${hovered ? " hovered" : ""}`}
-      style={{ height: ROW_H, paddingLeft: 6 + depth * 14 }}
+      style={{ height: ROW_H, paddingLeft: rowIndent(depth) }}
       onMouseEnter={guard(() => hoverRow(screenId, node.id))}
       onMouseLeave={() => clearHover(screenId, node.id)}
       onClick={guard((e: MouseEvent) => clickRow(screenId, node.id, e.shiftKey))}
