@@ -58,7 +58,7 @@ frontend/src/
     dev.ts                       Dev faults menu triggers
   tree.ts                      pure layers-tree helpers
   api.ts                       GET /screens, GET /elements/:key, with validation
-  components/                  Board, Preview, Overlay, LayersPanel, Inspector, Region, DevMenu
+  components/                  Board, Preview, Overlay, LayersPanel, Inspector, Region, DevMenu, Splitter (resizable panels)
 ```
 
 ## Decisions on ambiguous requirements

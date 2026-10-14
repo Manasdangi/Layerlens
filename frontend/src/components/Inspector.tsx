@@ -5,10 +5,10 @@ import { useStore } from "../state";
 import { Region } from "./Region";
 import { useRegion } from "./regionApi";
 
-export function Inspector() {
+export function Inspector({ width }: { width: number }) {
   const screenId = useStore((s) => s.selection?.screenId ?? s.activeId);
   return (
-    <aside className="panel inspector-panel">
+    <aside className="panel inspector-panel" style={{ width }}>
       <div className="panel-header">Inspector</div>
       <Region name="inspector" screenId={screenId} className="panel-error">
         <InspectorBody />

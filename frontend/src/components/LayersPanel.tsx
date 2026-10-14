@@ -21,10 +21,10 @@ import { useRegion } from "./regionApi";
 const ROW_H = 24;
 const rowIndent = (depth: number) => 6 + depth * 14;
 
-export function LayersPanel() {
+export function LayersPanel({ width }: { width: number }) {
   const activeId = useStore((s) => s.activeId);
   return (
-    <aside className="panel layers-panel">
+    <aside className="panel layers-panel" style={{ width }}>
       <div className="panel-header">Layers</div>
       {activeId ? (
         <Region key={activeId} name="layers" screenId={activeId} className="panel-error">

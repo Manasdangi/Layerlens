@@ -3,9 +3,14 @@ import { clearHover } from "./actions";
 import { Board } from "./components/Board";
 import { Inspector } from "./components/Inspector";
 import { LayersPanel } from "./components/LayersPanel";
+import { Splitter } from "./components/Splitter";
+import { usePanelWidth } from "./components/panelWidth";
 import { Toolbar } from "./components/Toolbar";
 
 export default function App() {
+  const layers = usePanelWidth(280);
+  const inspector = usePanelWidth(300);
+
   // Hover clears when the pointer leaves the window.
   useEffect(() => {
     const leave = () => clearHover();
@@ -21,9 +26,11 @@ export default function App() {
     <div className="app">
       <Toolbar />
       <div className="workspace">
-        <LayersPanel />
+        <LayersPanel width={layers.width} />
+        <Splitter panel="left" label="Resize layers panel" {...layers} />
         <Board />
-        <Inspector />
+        <Splitter panel="right" label="Resize inspector" {...inspector} />
+        <Inspector width={inspector.width} />
       </div>
     </div>
   );
