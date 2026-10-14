@@ -113,4 +113,32 @@ The full message list is in [protocol.ts](frontend/src/protocol.ts).
 
 ## How AI was used
 
-_To write: what you used it for, and where it got things wrong._
+I made the design decisions. I used Claude (via Claude Code) for implementation, review and tests.
+
+**What I decided before any code was written:**
+
+- **High-level design.** The app never touches a page's DOM. A small bridge script inside each page does hit-testing, reads boxes and styles, and owns element identity. The app holds only opaque ids and talks to pages over `postMessage`.
+- **State model.** One store, written only by actions. Anything tied to one page load is keyed by its `docId`, so a navigation starts that preview fresh.
+- **Protocol.** A handshake that locks onto the host's origin, requests with ids and timeouts, and pushes only for the elements being watched.
+- **Failure model.** One region per area of the UI. Errors from anywhere reach their region the same way. Each failure is reported exactly once, and cancellations are never failures.
+- **Code structure and UI.** The folders, which components exist and what each one owns, the pure tree helpers, and the layout: layers on the left, board in the centre, inspector on the right, dev faults in the toolbar.
+
+**What Claude did, with my review:**
+
+- Wrote most of the implementation from those decisions.
+- Audited the build against the brief and proposed fixes and refactors. One example is splitting the actions file into one module per concern. I reviewed each proposal and kept the ones that fit the design.
+- Wrote the unit tests (Vitest) and the end-to-end tests (Playwright), captured the screenshots in this README, and drafted [CLAUDE.md](CLAUDE.md).
+
+**Where it got things wrong:**
+
+- **Its first audit against the brief missed a dev-menu bug.** A silenced preview fails and can't be clicked, so it can't become active again, and the menu only offered "un-silence" for the active preview. The bug only surfaced when an end-to-end test tried to un-silence a preview after selecting something else.
+- **Several of its first end-to-end tests clicked the wrong element.** Clicking the centre of a table row lands on a `td`, and clicking a list item lands on its child, so the tests selected something other than what they asserted on.
+- **Its first way of making a page unresponsive in tests didn't work.** It added a message listener to swallow messages, but the bridge's own listener was registered first and still answered. The fix was to serve the bridge behind a mute switch in that test.
+- **A bulk find-and-replace in a refactor changed the board-timer fault.** It turned a guarded timer callback into code that ran immediately. This was caught on review, before running anything.
+- **The end-to-end suite silently reused my running dev server.** After a refactor that server was serving stale code, so all 72 tests failed. The suite now starts its own servers on separate ports.
+
+**What I checked myself:**
+
+- Every change had to pass the full test suite, the type checker and the linter before it was committed, and I reviewed the diffs.
+- I went through each requirement (R1–R6) by hand in the browser, including every Dev faults trigger.
+- I read the screenshots and test assertions against the brief, not just the passing counts.
